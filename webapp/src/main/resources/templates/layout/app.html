@@ -36,9 +36,13 @@
           </ul>
         </div>
         <!--/* ナビバー - 右端*/-->
+		<div>
         <ul class="navbar-nav">
           <li class="nav-item">
+			<a class="nav-link" th:classappend="|${usefunction == 'logout' ? 'active' : ''}|" th:href="@{/logout}">
+				ログアウト
             <!--/* ログアウトリンク */-->
+			</a>
           </li>
         </ul>
       </div>
