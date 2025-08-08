@@ -7,6 +7,7 @@ import java.util.Optional;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
+
 import com.s_giken.training.webapp.model.entity.Member;
 
 @Repository
@@ -39,7 +40,7 @@ public class MemberRepositoryImpl implements MemberRepository {
      */
     @Override
     public Optional<Member> findById(Long id) {
-        String sql = "SELECT * FROM T_MEMBER WHERE member_id = ?";
+        String sql = "SELECT * FROM T_MEMBER WHERE member_id =  ? ";
         Object[] args = { id };
         int[] argTypes = { Types.BIGINT };
         Member member = jdbcTemplate.queryForObject(sql, args, argTypes, rowMapper);
@@ -53,13 +54,29 @@ public class MemberRepositoryImpl implements MemberRepository {
      */
     @Override
     public List<Member> findByMailLike(String mail) {
-        String sql = "SELECT * FROM T_MEMBER WHERE mail like ?";
-        Object[] args = { mail };
+        String sql = "SELECT * FROM T_MEMBER WHERE mail like ? ";
+        Object[] args = { "%" + mail + "%" };
         int[] argTypes = { Types.VARCHAR };
         List<Member> result = jdbcTemplate.query(sql, args, argTypes, rowMapper);
         return result;
     }
 
+    @Override
+    public List<Member> findByNameLike(String name){
+    	String sql = "SELECT * FROM T_MEMBER WHERE name like ?";
+    	Object[] args = { "%" + name + "%" };
+    	int[] argTypes = { Types.VARCHAR };
+    	List<Member> result = jdbcTemplate.query(sql, args, argTypes, rowMapper);
+    	return result;
+    }
+    @Override
+    public List<Member> findByMailAndNameLike(String mail, String name){
+    	String sql = "SELECT * FROM T_MEMBER WHERE mail like ? AND name like ?";
+    	Object[] args = { "%" + mail + "%", "%" + name + "%" };
+    	int[] argTypes = { Types.VARCHAR, Types.VARCHAR };
+    	List<Member> result = jdbcTemplate.query(sql, args, argTypes, rowMapper);
+    	return result;
+    }
     /**
      * 加入者情報をデータベースへ登録する。
      * 

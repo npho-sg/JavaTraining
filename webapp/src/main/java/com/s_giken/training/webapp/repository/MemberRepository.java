@@ -2,6 +2,7 @@ package com.s_giken.training.webapp.repository;
 
 import java.util.List;
 import java.util.Optional;
+
 import com.s_giken.training.webapp.model.entity.Member;
 
 public interface MemberRepository {
@@ -25,6 +26,10 @@ public interface MemberRepository {
      * @return Optional型の Memberオブジェクト
      */
     public List<Member> findByMailLike(String mail);
+
+    public List<Member> findByNameLike(String name);
+    
+    public List<Member> findByMailAndNameLike(String mail, String name);
 
     /**
      * 加入者情報をデータベースへ登録する。
