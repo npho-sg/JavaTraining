@@ -3,13 +3,13 @@ package com.s_giken.training.webapp.model.entity;
 import java.sql.Timestamp;
 import java.time.LocalDate;
 
-import org.springframework.format.annotation.DateTimeFormat;
-
-import com.s_giken.training.webapp.model.PaymentMethod;
-
 import jakarta.annotation.Nullable;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+
+import org.springframework.format.annotation.DateTimeFormat;
+
+import com.s_giken.training.webapp.model.PaymentMethod;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

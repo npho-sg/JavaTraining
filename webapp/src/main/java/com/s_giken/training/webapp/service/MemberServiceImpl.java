@@ -47,19 +47,20 @@ public class MemberServiceImpl implements MemberService {
 		return memberRepository.findById(memberId);
 	}
 
-	@Override
+	/*@Override
 	public List<Member> findByMailLike(String mail) {
 		return memberRepository.findByMailLike(mail);
-	}
+	}*/
 
-	@Override
+	/*@Override
 	public List<Member> findByNameLike(String name) {
 		return memberRepository.findByNameLike(name);
-	}
+	}*/
 	
+	/*@Override
 	public List<Member> findByMailAndNameLike(String mail, String name){
 	return memberRepository.findByMailAndNameLike(mail, name);
-	}
+	}*/
 
 	/**
 	 * 加入者を条件検索する
@@ -71,14 +72,14 @@ public class MemberServiceImpl implements MemberService {
 	public List<Member> findByConditions(MemberSearchCondition memberSearchCondition) {
 		String mail = memberSearchCondition.getMail();
 		String name = memberSearchCondition.getName();
-		if ((mail != null || ! mail.equals("")) && (name == null || name.equals(""))) {
-			return findByMailLike(mail);
+		if (mail != null && name == null) {
+			return memberRepository.findByMailLike(mail);
 		}
-		else if ((name != null ||! name.equals("")) && (mail == null || mail.equals(""))) {
-			return findByNameLike(name);
+		else if (name != null && mail == null) {
+			return memberRepository.findByNameLike(name);
 		}
-		else if((mail != null || ! mail.equals("")) && (name != null || ! name.equals("") )) {
-			return findByMailAndNameLike(mail, name);
+		else if(mail != null && name != null) {
+			return memberRepository.findByMailAndNameLike(mail, name);
 		}
 		return findAll();
 		//return memberRepository.findByMailLike("%" + memberSearchCondition.getMail() + "%");
