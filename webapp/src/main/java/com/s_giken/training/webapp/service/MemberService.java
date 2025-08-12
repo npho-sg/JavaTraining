@@ -19,12 +19,6 @@ public interface MemberService {
     public List<Member> findAll();
 
     public Optional<Member> findById(Long memberId);
-    
-    //public List<Member> findByMailLike(String mail);
-
-    //public List<Member> findByNameLike(String name);
-    
-    //public List<Member> findByMailAndNameLike(String mail, String name);
 
     public List<Member> findByConditions(MemberSearchCondition memberSearchCondition);
 

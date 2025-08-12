@@ -47,21 +47,6 @@ public class MemberServiceImpl implements MemberService {
 		return memberRepository.findById(memberId);
 	}
 
-	/*@Override
-	public List<Member> findByMailLike(String mail) {
-		return memberRepository.findByMailLike(mail);
-	}*/
-
-	/*@Override
-	public List<Member> findByNameLike(String name) {
-		return memberRepository.findByNameLike(name);
-	}*/
-	
-	/*@Override
-	public List<Member> findByMailAndNameLike(String mail, String name){
-	return memberRepository.findByMailAndNameLike(mail, name);
-	}*/
-
 	/**
 	 * 加入者を条件検索する
 	 * 
@@ -73,11 +58,7 @@ public class MemberServiceImpl implements MemberService {
 		String mail = memberSearchCondition.getMail();
 		String name = memberSearchCondition.getName();
 		
-		//if(mail != null && name != null) {
-			return memberRepository.findByMailAndNameLike(mail, name);
-		//}
-		//return findAll();
-		//return memberRepository.findByMailLike("%" + memberSearchCondition.getMail() + "%");
+		return memberRepository.findByMailAndNameLike(mail, name);
 	}
 
 	/**

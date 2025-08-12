@@ -33,11 +33,6 @@ public class MemberRepositoryImpl implements MemberRepository {
         return result;
     }
 
-    /**
-     * メールアドレスの一部にマッチするの加入者情報リストを取得する。
-     * 
-     * @return Optional型の Memberオブジェクト
-     */
     @Override
     public Optional<Member> findById(Long id) {
         String sql = "SELECT * FROM T_MEMBER WHERE member_id =  ? ";
@@ -46,29 +41,7 @@ public class MemberRepositoryImpl implements MemberRepository {
         Member member = jdbcTemplate.queryForObject(sql, args, argTypes, rowMapper);
         return Optional.ofNullable(member);
     }
-
-    /**
-     * メールアドレスの一部にマッチするの加入者情報リストを取得する。
-     * 
-     * @return Optional型の Memberオブジェクト
-     */
-    @Override
-    public List<Member> findByMailLike(String mail) {
-        String sql = "SELECT * FROM T_MEMBER WHERE mail like ? ";
-        Object[] args = { "%" + mail + "%" };
-        int[] argTypes = { Types.VARCHAR };
-        List<Member> result = jdbcTemplate.query(sql, args, argTypes, rowMapper);
-        return result;
-    }
-
-    @Override
-    public List<Member> findByNameLike(String name){
-    	String sql = "SELECT * FROM T_MEMBER WHERE name like ?";
-    	Object[] args = { "%" + name + "%" };
-    	int[] argTypes = { Types.VARCHAR };
-    	List<Member> result = jdbcTemplate.query(sql, args, argTypes, rowMapper);
-    	return result;
-    }
+    
     @Override
     public List<Member> findByMailAndNameLike(String mail, String name){
     	String sql = "SELECT * FROM T_MEMBER WHERE mail like ? AND name like ?";

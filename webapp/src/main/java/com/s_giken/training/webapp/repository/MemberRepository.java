@@ -25,9 +25,6 @@ public interface MemberRepository {
      * 
      * @return Optional型の Memberオブジェクト
      */
-    public List<Member> findByMailLike(String mail);
-
-    public List<Member> findByNameLike(String name);
     
     public List<Member> findByMailAndNameLike(String mail, String name);
 
