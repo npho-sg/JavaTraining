@@ -19,12 +19,6 @@ public interface MemberRepository {
      * @return Optional型の Memberオブジェクト
      */
     public Optional<Member> findById(Long id);
-
-    /**
-     * メールアドレスの一部にマッチするの加入者情報リストを取得する。
-     * 
-     * @return Optional型の Memberオブジェクト
-     */
     
     public List<Member> findByMailAndNameLike(String mail, String name);
 
