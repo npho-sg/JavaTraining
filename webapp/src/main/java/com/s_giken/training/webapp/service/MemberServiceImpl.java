@@ -72,16 +72,11 @@ public class MemberServiceImpl implements MemberService {
 	public List<Member> findByConditions(MemberSearchCondition memberSearchCondition) {
 		String mail = memberSearchCondition.getMail();
 		String name = memberSearchCondition.getName();
-		if (mail != null && name == null) {
-			return memberRepository.findByMailLike(mail);
-		}
-		else if (name != null && mail == null) {
-			return memberRepository.findByNameLike(name);
-		}
-		else if(mail != null && name != null) {
+		
+		//if(mail != null && name != null) {
 			return memberRepository.findByMailAndNameLike(mail, name);
-		}
-		return findAll();
+		//}
+		//return findAll();
 		//return memberRepository.findByMailLike("%" + memberSearchCondition.getMail() + "%");
 	}
 
