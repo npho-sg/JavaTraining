@@ -2,7 +2,6 @@ package com.s_giken.training.webapp.repository;
 
 import java.math.BigDecimal;
 import java.sql.Timestamp;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -35,8 +34,8 @@ public class ChargeRepositoryImpl implements ChargeRepository {
 	    		charge.setChargeId((long)li.get("charge_id"));
 	    		charge.setChargeName((String)li.get("name"));
 	    		charge.setAmount((BigDecimal)li.get("amount"));
-	    		charge.setStartDate((LocalDate)li.get("start_date"));
-	    		charge.setEndDate((LocalDate)li.get("end_date"));
+	    		charge.setStartDate(((java.sql.Date)li.get("start_date")).toLocalDate());
+	    		charge.setEndDate(((java.sql.Date)li.get("end_date")).toLocalDate());
 	    		charge.setCreatedAt((Timestamp)li.get("created_at"));
 	    		charge.setModifiedAt((Timestamp)li.get("modified_at"));
 	    		result.add(charge);
