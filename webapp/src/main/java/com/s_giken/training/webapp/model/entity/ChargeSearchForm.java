@@ -1,5 +1,7 @@
 package com.s_giken.training.webapp.model.entity;
 
+import jakarta.validation.constraints.Max;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -9,6 +11,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor // 全てのメンバ変数に対する引数を持つコンストラクタを自動生成
 public class ChargeSearchForm {
 	
+	@Max(value=127, message="最大が127文字です。")
 	private String chargeName;
 
 }

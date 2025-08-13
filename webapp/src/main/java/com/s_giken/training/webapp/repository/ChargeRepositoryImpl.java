@@ -21,10 +21,11 @@ public class ChargeRepositoryImpl implements ChargeRepository {
 
 	private final JdbcTemplate jdbcTemplate;
 
+	@Override
 	public List<Charge> findByChargeNameLike(ChargeSearchForm chargeName){
 	
 	    	String sql = "SELECT * FROM T_CHARGE WHERE name like ?";
-	    	String p = "%" + chargeName + "%";
+	    	String p = "%" + chargeName.getChargeName() + "%";
 	    	
 	    	List<Map<String, Object>> list = jdbcTemplate.queryForList(sql, p);
 	    	

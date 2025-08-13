@@ -14,7 +14,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class ChargeServiceImpl implements ChargeService {
 
-	private ChargeRepository chargeRepository;
+	private final ChargeRepository chargeRepository;
 	
 	@Override
 	public List<Charge> findByChargeName(ChargeSearchForm searchName) {
