@@ -36,7 +36,7 @@ public class MemberRepositoryImpl implements MemberRepository {
     @Override
     public Optional<Member> findById(Long id) {
         String sql = "SELECT * FROM T_MEMBER WHERE member_id =  ? ";
-        Object[] args = { id };
+        Object[] args = { "%" + id + "%" };
         int[] argTypes = { Types.BIGINT };
         Member member = jdbcTemplate.queryForObject(sql, args, argTypes, rowMapper);
         return Optional.ofNullable(member);
