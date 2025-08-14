@@ -35,7 +35,8 @@ public class ChargeRepositoryImpl implements ChargeRepository {
 	    		charge.setChargeName((String)li.get("name"));
 	    		charge.setAmount((BigDecimal)li.get("amount"));
 	    		charge.setStartDate(((java.sql.Date)li.get("start_date")).toLocalDate());
-	    		charge.setEndDate(((java.sql.Date)li.get("end_date")).toLocalDate());
+	    		if(li.get("end_date") == null) {charge.setEndDate(null);}
+	    		else{charge.setEndDate(((java.sql.Date)li.get("end_date")).toLocalDate());}
 	    		charge.setCreatedAt((Timestamp)li.get("created_at"));
 	    		charge.setModifiedAt((Timestamp)li.get("modified_at"));
 	    		result.add(charge);
