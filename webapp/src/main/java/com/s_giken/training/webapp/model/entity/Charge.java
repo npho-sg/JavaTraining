@@ -20,12 +20,12 @@ import lombok.NoArgsConstructor;
 public class Charge {
 	
 	@Nullable
-	private long chargeId;
+	private Long chargeId;
 	
 	@NotBlank
 	private String chargeName;
 	
-	@NotBlank
+	@NotNull
 	private BigDecimal amount;
 	
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
