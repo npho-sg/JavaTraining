@@ -5,6 +5,8 @@ import java.sql.Timestamp;
 import java.time.LocalDate;
 
 import jakarta.annotation.Nullable;
+import jakarta.validation.constraints.DecimalMax;
+import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
@@ -26,6 +28,8 @@ public class Charge {
 	private String chargeName;
 	
 	@NotNull
+	@DecimalMin(value = "0")
+	@DecimalMax(value = "999999999")
 	private BigDecimal amount;
 	
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
