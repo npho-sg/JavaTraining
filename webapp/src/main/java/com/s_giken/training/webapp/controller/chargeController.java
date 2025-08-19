@@ -113,11 +113,11 @@ public class chargeController {
 			RedirectAttributes redirectAttributes) {
 		var charge = chargeService.findByChargeId(chargeId);
 		if (!charge.isPresent()) {
-			throw new NotFoundException(String.format("指定したchargeId(%d)の加入者情報が存在しません。", chargeId));
+			throw new NotFoundException(String.format("指定したchargeId(%d)の料金情報が存在しません。", chargeId));
 		}
 
 		chargeService.deleteById(chargeId);
 		redirectAttributes.addFlashAttribute("message", "削除しました。");
-		return "redirect:/member/search";
+		return "redirect:/charge/search";
 	}
 }
