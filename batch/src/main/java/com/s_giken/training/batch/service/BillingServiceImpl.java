@@ -1,8 +1,7 @@
 package com.s_giken.training.batch.service;
 
 import org.springframework.stereotype.Service;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
 import com.s_giken.training.batch.repository.BillingRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -19,15 +18,15 @@ public class BillingServiceImpl implements BillingService {
 	}
 
 	@Override
-	public void resetStatus(String ym) {
+	public boolean resetStatus(String ym) {
 
 		try {
 			billingRepository.deleteByMonth(ym);
 			billingRepository.insertStatus(ym);
-			logger.info("請求状況の更新に成功しました");
+			return true;
 		} catch (Exception e) {
-			logger.error("コミットに失敗しました" + e.getMessage());
-			System.exit(1); 
+			logger.error("更新に失敗しました",e);
+			return false;
 		}
 	}
 }

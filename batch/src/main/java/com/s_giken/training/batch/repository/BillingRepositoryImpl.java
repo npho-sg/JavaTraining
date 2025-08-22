@@ -36,4 +36,6 @@ public class BillingRepositoryImpl implements BillingRepository {
 	public void insertStatus(String ym) {
 		jdbcTemplate.update("INSERT INTO T_BILLING_STATUS (billing_ym, is?commited) VALUES (?, FALSE) ", ym);
 	}
+	
+	
 }
