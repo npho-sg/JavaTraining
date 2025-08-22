@@ -7,15 +7,15 @@ import com.s_giken.training.webapp.model.entity.Charge;
 import com.s_giken.training.webapp.model.entity.ChargeSearchForm;
 
 public interface ChargeRepository {
-	
+
 	public List<Charge> findByChargeNameLike(ChargeSearchForm chargeName);
-	
+
 	public Optional<Charge> findByChargeId(Long chargeId);
-	
-    public int add(Charge charge);
 
-    public int update(Charge charge);
+	public int add(Charge charge);
 
-    public int deleteByChargeId(Long chargeid);
-	
+	public int update(Charge charge);
+
+	public int deleteByChargeId(Long chargeid);
+
 }

@@ -35,7 +35,7 @@ public class ChargeRowMapper implements RowMapper<Charge> {
 		charge.setEndDate((date != null) ? date.toLocalDate() : null);
 		
 		charge.setCreatedAt(rs.getTimestamp("created_at"));
-        charge.setModifiedAt(rs.getTimestamp("modified_at"));
+		charge.setModifiedAt(rs.getTimestamp("modified_at"));
 
 		return charge;
 	}
