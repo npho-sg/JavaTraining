@@ -28,9 +28,9 @@ public class BillingRepositoryImpl implements BillingRepository {
 	@Override
 	public void deleteByMonth(String ym) {
 
-		jdbcTemplate.update("DELETE FROM T_BILLING_DETAIL_DATA WHERE billing_ym = ? ", ym);
-		jdbcTemplate.update("DELETE FROM T_BILLING_DATA WHERE billing_ym = ? ", ym);
-		jdbcTemplate.update("DELETE FROM T_BILLING_STATUS WHERE billing_ym = ? ", ym);
+		jdbcTemplate.update("DELETE FROM T_BILLING_DETAIL_DATA WHERE billing_ym = PARSEDATETIME(CONCAT(? , '01'), 'yyyyMMdd') ", ym);
+		jdbcTemplate.update("DELETE FROM T_BILLING_DATA WHERE billing_ym = PARSEDATETIME(CONCAT(? , '01'), 'yyyyMMdd') ", ym);
+		jdbcTemplate.update("DELETE FROM T_BILLING_STATUS WHERE billing_ym = PARSEDATETIME(CONCAT(? , '01'), 'yyyyMMdd') ", ym);
 	}
 
 	@Override

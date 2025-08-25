@@ -51,7 +51,7 @@ public class BatchApplication implements CommandLineRunner {
 		// - データベースからデータを取得する
 
 		String targetYm = args[0];
-		String ym = targetYm.substring(0, 3) + "年" + targetYm.substring(4, 5) + "月";
+		String ym = targetYm.substring(0, 4) + "年" + targetYm.substring(5, 6) + "月";
 
 		logger.info(ym + "分の請求情報を確認しています。");
 		if (billingService.isConfirmed(targetYm).orElse(0) == 1) {
