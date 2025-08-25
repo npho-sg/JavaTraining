@@ -22,7 +22,7 @@ CREATE SEQUENCE IF NOT EXISTS t_charge_seq AS BIGINT START WITH 1 INCREMENT BY 1
 CREATE TABLE IF NOT EXISTS T_CHARGE(
     charge_id	    BIGINT,	
     name	        VARCHAR(127) NOT NULL,
-    amont           NUMERIC(9,0) NOT NULL,
+    amount           NUMERIC(9,0) NOT NULL,
     start_date	    DATE NOT NULL,
     end_date	    DATE,	
     created_at	    TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
