@@ -1,5 +1,9 @@
 package com.s_giken.training.batch;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
@@ -43,15 +47,28 @@ public class BatchApplication implements CommandLineRunner {
 	public void run(String... args) throws RuntimeException {
 		logger.info("-".repeat(40));
 
-		// TODO: ここにバッチ処理のコードを記述する
-		if (args.length == 0 || args.length >= 2 || !args[0].matches("\\d{6}")) {
-			logger.error("不正な値です");
+		if (args.length == 0) {
+			logger.error("不正な値です。対象年月を１つ選択してください。");
+			System.exit(1);
+		} else if (args.length >= 2) {
+			logger.error("不正な値です。対象年月は１つまでです。");
+			System.exit(1);
+		} else if (!args[0].matches("\\d{6}")) {
+			logger.error("不正な値です。６文字入力してください。");
+			System.exit(1);
+		}
+
+		try {
+			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
+			LocalDate date = LocalDate.parse(args[0] +"01", formatter);
+		} catch (DateTimeParseException e) {
+			logger.error("不正な値です。１月から１２月の範囲で指定してください。");
 			System.exit(1);
 		}
 		// - データベースからデータを取得する
 
 		String targetYm = args[0];
-		String ym = targetYm.substring(0, 4) + "年" + targetYm.substring(5, 6) + "月";
+		String ym = targetYm.substring(0, 4) + "年" + targetYm.substring(4, 6) + "月";
 
 		logger.info(ym + "分の請求情報を確認しています。");
 		if (billingService.isConfirmed(targetYm).orElse(0) == 1) {
@@ -62,20 +79,14 @@ public class BatchApplication implements CommandLineRunner {
 		// - データを加工する
 		// - 加工したデータをデータベースに登録する
 		if (billingService.resetStatus(targetYm, ym) == false) {
-			logger.error(ym + "分の請求ステータス情報を");
+			logger.error(ym + "分の請求ステータス情報を追加できませんでした。");
 			System.exit(1);
 		}
-
-		// ダミーコード
-		// 削除してください。
-		Integer count = jdbcTemplate.queryForObject("SELECT COUNT(*) FROM T_MEMBER", Integer.class);
-		if (count != null) {
-			logger.info("加入者数:" + count.toString());
-		} else {
-			logger.error("加入者数を取得できませんでした。");
+		if(billingService.resetDataAndDetail(targetYm, ym) == false) {
+			logger.error(ym + "分の請求データを追加できませんでした。");
+			logger.error(ym + "分の請求明細データを追加できませんでした。");
+			System.exit(1);
 		}
-		// ダミーコードここまで
-
 		logger.info("-".repeat(40));
 	}
 }

@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Billing_Status {
+public class BillingStatus {
 	
 	private String billingYm;
 	private boolean commited;

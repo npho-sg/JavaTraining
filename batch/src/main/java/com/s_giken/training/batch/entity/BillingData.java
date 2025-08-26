@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Billing_Data {
+public class BillingData {
 
     private String billingMonth;
     private String subscriberId;

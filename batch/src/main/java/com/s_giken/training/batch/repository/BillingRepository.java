@@ -4,9 +4,9 @@ import java.util.Optional;
 
 public interface BillingRepository {
 	
-    Optional<Integer> isConfirmed(String ym);
+    Optional<Integer> getConfirmedCount(String ym);
     void deleteByMonth(String ym);
-    void updateStatus(String ym);
-    int updateData(String ym);
-    int updateDetail(String ym);
+    void insertStatus(String ym);
+    int insertData(String ym);
+    int insertDetail(String ym);
 }

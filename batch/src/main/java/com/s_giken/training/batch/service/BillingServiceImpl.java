@@ -21,7 +21,7 @@ public class BillingServiceImpl implements BillingService {
 	@Override
 	public Optional<Integer> isConfirmed(String ym) {
 
-		return billingRepository.isConfirmed(ym);
+		return billingRepository.getConfirmedCount(ym);
 	}
 
 	@Transactional
@@ -32,7 +32,7 @@ public class BillingServiceImpl implements BillingService {
 			billingRepository.deleteByMonth(ym);
 			logger.info("データベースから" + ymf + "分の未確定請求情報を削除しました。");
 			logger.info(ymf + "分の請求ステータス情報を追加しています。");
-			billingRepository.updateStatus(ym);
+			billingRepository.insertStatus(ym);
 			logger.info("１件追加しました。");
 			return true;
 		} catch (Exception e) {
@@ -47,10 +47,10 @@ public class BillingServiceImpl implements BillingService {
 
 		try {
 			logger.info(ymf + "分の請求データ情報を追加しています。");
-			int result = billingRepository.updateData(ym);
+			int result = billingRepository.insertData(ym);
 			logger.info(result + "件追加しました。");
 			logger.info(ymf + "分の請求明細データ情報を追加しています。");
-			int result1 = billingRepository.updateDetail(ym);
+			int result1 = billingRepository.insertDetail(ym);
 			logger.info(result1 + "件追加しました。");
 			
 			return true;
