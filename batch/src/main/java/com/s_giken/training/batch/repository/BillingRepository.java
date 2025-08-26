@@ -8,5 +8,6 @@ public interface BillingRepository {
     void deleteByMonth(String ym);
     void insertStatus(String ym);
     int insertData(String ym);
+    public int updateDataToAmount();
     int insertDetail(String ym);
 }

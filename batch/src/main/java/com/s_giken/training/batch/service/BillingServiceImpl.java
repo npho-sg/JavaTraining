@@ -48,10 +48,11 @@ public class BillingServiceImpl implements BillingService {
 		try {
 			logger.info(ymf + "分の請求データ情報を追加しています。");
 			int result = billingRepository.insertData(ym);
+			billingRepository.updateDataToAmount();
 			logger.info(result + "件追加しました。");
 			logger.info(ymf + "分の請求明細データ情報を追加しています。");
-			int result1 = billingRepository.insertDetail(ym);
-			logger.info(result1 + "件追加しました。");
+			int result2 = billingRepository.insertDetail(ym);
+			logger.info(result2 + "件追加しました。");
 			
 			return true;
 		} catch (Exception e) {

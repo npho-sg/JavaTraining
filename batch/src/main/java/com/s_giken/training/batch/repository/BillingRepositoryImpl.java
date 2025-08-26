@@ -50,37 +50,61 @@ public class BillingRepositoryImpl implements BillingRepository {
 
 		StringBuilder sb = new StringBuilder();
 
-		sb.append("INSERT INTO T_BILLING_DATA (");
+		sb.append(" INSERT INTO T_BILLING_DATA (");
 		sb.append(
 				" billing_ym, member_id, mail, name, address, start_date, end_date, payment_method, amount, tax_ratio, total, modified_at ");
-		sb.append(") ");
-		sb.append("SELECT ");
+		sb.append(" ) ");
+		sb.append(" SELECT ");
 		sb.append(" PARSEDATETIME(CONCAT(? , '01'), 'yyyyMMdd'), ");
-		sb.append(" a.member_id, ");
-		sb.append(" a.mail, ");
-		sb.append(" a.name, ");
-		sb.append(" a.address, ");
-		sb.append(" a.start_date, ");
-		sb.append(" a.end_date, ");
-		sb.append(" a.payment_method, ");
-		sb.append(" b.amount, ");
+		sb.append(" member_id, ");
+		sb.append(" mail, ");
+		sb.append(" name, ");
+		sb.append(" address, ");
+		sb.append(" start_date, ");
+		sb.append(" end_date, ");
+		sb.append(" payment_method, ");
+		sb.append(" 0, ");//null禁止のため一時的に0を追加
 		sb.append(" 0.1, ");
-		sb.append(" FLOOR(b.amount * (1 + 0.1)), ");
+		sb.append(" 0, ");//null禁止のため一時的に0を追加
 		sb.append(" CURRENT_TIMESTAMP ");
-		sb.append("FROM T_MEMBER a ");
-		sb.append("CROSS JOIN T_CHARGE b ");
-		sb.append("WHERE ");
-		sb.append("(");
-		sb.append(" a.start_date <= LAST_DAY(PARSEDATETIME(CONCAT(? , '01'), 'yyyyMMdd')) AND ");
-		sb.append(" (a.end_date IS NULL OR a.end_date >= PARSEDATETIME(CONCAT(? , '01'), 'yyyyMMdd')) ");
-		sb.append(") ");
-		sb.append("AND ");
-		sb.append("(");
-		sb.append(" b.start_date <= LAST_DAY(PARSEDATETIME(CONCAT(? , '01'), 'yyyyMMdd')) AND ");
-		sb.append(" (b.end_date IS NULL OR b.end_date >= PARSEDATETIME(CONCAT(? , '01'), 'yyyyMMdd')) ");
-		sb.append(");");
+		sb.append(" FROM T_MEMBER ");
+		sb.append(" WHERE ");
+		sb.append(" start_date <= LAST_DAY(PARSEDATETIME(CONCAT(? , '01'), 'yyyyMMdd')) AND ");
+		sb.append(" (end_date IS NULL OR end_date >= PARSEDATETIME(CONCAT(? , '01'), 'yyyyMMdd')); ");
+
 		String sql = sb.toString();
-		int result = jdbcTemplate.update(sql, ym, ym, ym, ym, ym);
+		int result = jdbcTemplate.update(sql, ym, ym, ym);
+		return result;
+	}
+
+	@Override
+	public int updateDataToAmount() {
+
+		StringBuilder sb = new StringBuilder();
+
+		sb.append(" UPDATE T_BILLING_DATA ");
+		sb.append(" SET ");
+		sb.append(" amount = ( ");
+		sb.append(" SELECT SUM(amount) ");
+		sb.append(" FROM T_CHARGE ");
+		sb.append(" WHERE T_CHARGE.start_date = T_BILLING_DATA.start_date ");
+		sb.append(" AND (T_CHARGE.end_date IS NULL OR T_CHARGE.end_date = T_BILLING_DATA.end_date) ");
+		sb.append(" ), ");
+		sb.append(" total = FLOOR(( ");
+		sb.append(" SELECT SUM(amount) ");
+		sb.append(" FROM T_CHARGE ");
+		sb.append(" WHERE T_CHARGE.start_date = T_BILLING_DATA.start_date ");
+		sb.append(" AND (T_CHARGE.end_date IS NULL OR T_CHARGE.end_date = T_BILLING_DATA.end_date) ");
+		sb.append(" ) * (1 + tax_ratio)) ");
+		sb.append(" WHERE EXISTS ( ");
+		sb.append(" SELECT 1 ");
+		sb.append(" FROM T_CHARGE ");
+		sb.append(" WHERE T_CHARGE.start_date = T_BILLING_DATA.start_date ");
+		sb.append(" AND (T_CHARGE.end_date IS NULL OR T_CHARGE.end_date = T_BILLING_DATA.end_date) ");
+		sb.append(" ); ");
+
+		String sql = sb.toString();
+		int result = jdbcTemplate.update(sql);
 		return result;
 	}
 
