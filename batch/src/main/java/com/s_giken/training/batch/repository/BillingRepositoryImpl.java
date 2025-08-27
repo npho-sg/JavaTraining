@@ -90,15 +90,16 @@ public class BillingRepositoryImpl implements BillingRepository {
 		sb.append("AND (end_date IS NULL OR end_date >= PARSEDATETIME(CONCAT(? , '01'), 'yyyyMMdd')) ");
 		sb.append(") ");
 		sb.append("WHERE billing_ym = PARSEDATETIME(CONCAT(? , '01'), 'yyyyMMdd'); ");
-
-		// ② total を更新
-
-		sb.append("UPDATE T_BILLING_DATA ");
-		sb.append("SET total = FLOOR(amount * (1 + tax_ratio)) ");
-		sb.append("WHERE billing_ym = PARSEDATETIME(CONCAT(? , '01'), 'yyyyMMdd'); ");
-
 		String sql = sb.toString();
-		int result = jdbcTemplate.update(sql, ym, ym, ym, ym) ;
+		int result = jdbcTemplate.update(sql, ym, ym, ym) ;
+		
+		StringBuilder sb1 = new StringBuilder();
+		sb1.append("UPDATE T_BILLING_DATA ");
+		sb1.append("SET total = FLOOR(amount * (1 + tax_ratio)) ");
+		sb1.append("WHERE billing_ym = PARSEDATETIME(CONCAT(? , '01'), 'yyyyMMdd'); ");
+
+		String sql1 = sb1.toString();
+		jdbcTemplate.update(sql1, ym) ;
 		return result;
 	}
 
