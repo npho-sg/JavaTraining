@@ -48,7 +48,7 @@ public class BillingServiceImpl implements BillingService {
 		try {
 			logger.info(ymf + "分の請求データ情報を追加しています。");
 			int result = billingRepository.insertData(ym);
-			billingRepository.updateDataToAmount();
+			billingRepository.updateDataToAmount(ym);
 			logger.info(result + "件追加しました。");
 			logger.info(ymf + "分の請求明細データ情報を追加しています。");
 			int result2 = billingRepository.insertDetail(ym);

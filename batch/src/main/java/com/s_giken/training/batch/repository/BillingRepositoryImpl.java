@@ -41,7 +41,8 @@ public class BillingRepositoryImpl implements BillingRepository {
 	public void insertStatus(String ym) {
 		jdbcTemplate.update(
 				"INSERT INTO T_BILLING_STATUS (billing_ym, is_commit) "
-				+ "VALUES (PARSEDATETIME(CONCAT(? , '01'), 'yyyyMMdd'), FALSE) ", ym);
+						+ "VALUES (PARSEDATETIME(CONCAT(? , '01'), 'yyyyMMdd'), FALSE) ",
+				ym);
 	}
 
 	@Override
@@ -77,33 +78,27 @@ public class BillingRepositoryImpl implements BillingRepository {
 	}
 
 	@Override
-	public int updateDataToAmount() {
+	public int updateDataToAmount(String ym) {
 
 		StringBuilder sb = new StringBuilder();
 
-		sb.append(" UPDATE T_BILLING_DATA ");
-		sb.append(" SET ");
-		sb.append(" amount = ( ");
-		sb.append(" SELECT SUM(amount) ");
-		sb.append(" FROM T_CHARGE ");
-		sb.append(" WHERE T_CHARGE.start_date = T_BILLING_DATA.start_date ");
-		sb.append(" AND T_CHARGE.end_date = T_BILLING_DATA.end_date ");
-		sb.append(" ), ");
-		sb.append(" total = FLOOR(( ");
-		sb.append(" SELECT SUM(amount) ");
-		sb.append(" FROM T_CHARGE ");
-		sb.append(" WHERE T_CHARGE.start_date = T_BILLING_DATA.start_date ");
-		sb.append(" AND T_CHARGE.end_date = T_BILLING_DATA.end_date ");
-		sb.append(" ) * (1 + tax_ratio)) ");
-		sb.append(" WHERE EXISTS ( ");
-		sb.append(" SELECT 1 ");
-		sb.append(" FROM T_CHARGE ");
-		sb.append(" WHERE T_CHARGE.start_date = T_BILLING_DATA.start_date ");
-		sb.append(" AND T_CHARGE.end_date = T_BILLING_DATA.end_date ");
-		sb.append(" ); ");
+		sb.append("UPDATE T_BILLING_DATA ");
+		sb.append("SET amount = ( ");
+		sb.append("SELECT SUM(amount) ");
+		sb.append("FROM T_CHARGE ");
+		sb.append("WHERE start_date <= LAST_DAY(PARSEDATETIME(CONCAT(? , '01'), 'yyyyMMdd')) ");
+		sb.append("AND (end_date IS NULL OR end_date >= PARSEDATETIME(CONCAT(? , '01'), 'yyyyMMdd')) ");
+		sb.append(") ");
+		sb.append("WHERE billing_ym = PARSEDATETIME(CONCAT(? , '01'), 'yyyyMMdd'); ");
+
+		// ② total を更新
+
+		sb.append("UPDATE T_BILLING_DATA ");
+		sb.append("SET total = FLOOR(amount * (1 + tax_ratio)) ");
+		sb.append("WHERE billing_ym = PARSEDATETIME(CONCAT(? , '01'), 'yyyyMMdd'); ");
 
 		String sql = sb.toString();
-		int result = jdbcTemplate.update(sql);
+		int result = jdbcTemplate.update(sql, ym, ym, ym, ym) ;
 		return result;
 	}
 
