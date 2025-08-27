@@ -16,8 +16,8 @@ public class BillingRepositoryImpl implements BillingRepository {
 
 	@Override
 	public Optional<Integer> getConfirmedCount(String ym) {
-		String sql = "SELECT COUNT(*) FROM T_BILLING_STATUS WHERE billing_ym = PARSEDATETIME(CONCAT(? , '01'),"
-				+ " 'yyyyMMdd') AND is_commit = TRUE ";
+		String sql = "SELECT COUNT(*) FROM T_BILLING_STATUS "
+				+ "WHERE billing_ym = PARSEDATETIME(CONCAT(? , '01'), 'yyyyMMdd') AND is_commit = TRUE ";
 		try {
 			Integer count = jdbcTemplate.queryForObject(sql, Integer.class, ym);
 			return Optional.ofNullable(count);
@@ -29,20 +29,19 @@ public class BillingRepositoryImpl implements BillingRepository {
 	@Override
 	public void deleteByMonth(String ym) {
 
-		jdbcTemplate.update("DELETE FROM T_BILLING_DETAIL_DATA WHERE billing_ym = PARSEDATETIME(CONCAT(? , '01'),"
-				+ " 'yyyyMMdd') ", ym);
-		jdbcTemplate.update("DELETE FROM T_BILLING_DATA WHERE billing_ym = PARSEDATETIME(CONCAT(? , '01'),"
-				+ " 'yyyyMMdd') ", ym);
-		jdbcTemplate.update("DELETE FROM T_BILLING_STATUS WHERE billing_ym = PARSEDATETIME(CONCAT(? , '01'),"
-				+ " 'yyyyMMdd') ", ym);
+		jdbcTemplate.update("DELETE FROM T_BILLING_DETAIL_DATA "
+				+ "WHERE billing_ym = PARSEDATETIME(CONCAT(? , '01'), 'yyyyMMdd') ", ym);
+		jdbcTemplate.update("DELETE FROM T_BILLING_DATA "
+				+ "WHERE billing_ym = PARSEDATETIME(CONCAT(? , '01'), 'yyyyMMdd') ", ym);
+		jdbcTemplate.update("DELETE FROM T_BILLING_STATUS "
+				+ "WHERE billing_ym = PARSEDATETIME(CONCAT(? , '01'), 'yyyyMMdd') ", ym);
 	}
 
 	@Override
 	public void insertStatus(String ym) {
 		jdbcTemplate.update(
-				"INSERT INTO T_BILLING_STATUS (billing_ym, is_commit) VALUES (PARSEDATETIME(CONCAT(? , '01'),"
-						+ " 'yyyyMMdd'), FALSE) ",
-				ym);
+				"INSERT INTO T_BILLING_STATUS (billing_ym, is_commit) "
+				+ "VALUES (PARSEDATETIME(CONCAT(? , '01'), 'yyyyMMdd'), FALSE) ", ym);
 	}
 
 	@Override
@@ -88,19 +87,19 @@ public class BillingRepositoryImpl implements BillingRepository {
 		sb.append(" SELECT SUM(amount) ");
 		sb.append(" FROM T_CHARGE ");
 		sb.append(" WHERE T_CHARGE.start_date = T_BILLING_DATA.start_date ");
-		sb.append(" AND (T_CHARGE.end_date IS NULL OR T_CHARGE.end_date = T_BILLING_DATA.end_date) ");
+		sb.append(" AND T_CHARGE.end_date = T_BILLING_DATA.end_date ");
 		sb.append(" ), ");
 		sb.append(" total = FLOOR(( ");
 		sb.append(" SELECT SUM(amount) ");
 		sb.append(" FROM T_CHARGE ");
 		sb.append(" WHERE T_CHARGE.start_date = T_BILLING_DATA.start_date ");
-		sb.append(" AND (T_CHARGE.end_date IS NULL OR T_CHARGE.end_date = T_BILLING_DATA.end_date) ");
+		sb.append(" AND T_CHARGE.end_date = T_BILLING_DATA.end_date ");
 		sb.append(" ) * (1 + tax_ratio)) ");
 		sb.append(" WHERE EXISTS ( ");
 		sb.append(" SELECT 1 ");
 		sb.append(" FROM T_CHARGE ");
 		sb.append(" WHERE T_CHARGE.start_date = T_BILLING_DATA.start_date ");
-		sb.append(" AND (T_CHARGE.end_date IS NULL OR T_CHARGE.end_date = T_BILLING_DATA.end_date) ");
+		sb.append(" AND T_CHARGE.end_date = T_BILLING_DATA.end_date ");
 		sb.append(" ); ");
 
 		String sql = sb.toString();
