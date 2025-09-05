@@ -12,7 +12,5 @@ public interface BillingRepository {
 
 	public int insertData(String ym);
 
-	public int updateDataToAmount(String ym);
-
 	public int insertDetail(String ym);
 }

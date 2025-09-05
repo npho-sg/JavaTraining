@@ -50,56 +50,33 @@ public class BillingRepositoryImpl implements BillingRepository {
 
 		StringBuilder sb = new StringBuilder();
 
-		sb.append(" INSERT INTO T_BILLING_DATA (");
+		sb.append("INSERT INTO T_BILLING_DATA (");
 		sb.append(
 				" billing_ym, member_id, mail, name, address, start_date, end_date, payment_method, amount, tax_ratio, total, modified_at ");
-		sb.append(" ) ");
-		sb.append(" SELECT ");
-		sb.append(" PARSEDATETIME(CONCAT(? , '01'), 'yyyyMMdd'), ");
-		sb.append(" member_id, ");
-		sb.append(" mail, ");
-		sb.append(" name, ");
-		sb.append(" address, ");
-		sb.append(" start_date, ");
-		sb.append(" end_date, ");
-		sb.append(" payment_method, ");
-		sb.append(" 0, ");//null禁止のため一時的に0を追加
-		sb.append(" 0.1, ");
-		sb.append(" 0, ");//null禁止のため一時的に0を追加
-		sb.append(" CURRENT_TIMESTAMP ");
-		sb.append(" FROM T_MEMBER ");
-		sb.append(" WHERE ");
-		sb.append(" start_date <= LAST_DAY(PARSEDATETIME(CONCAT(? , '01'), 'yyyyMMdd')) AND ");
-		sb.append(" (end_date IS NULL OR end_date >= PARSEDATETIME(CONCAT(? , '01'), 'yyyyMMdd')); ");
-
-		String sql = sb.toString();
-		int result = jdbcTemplate.update(sql, ym, ym, ym);
-		return result;
-	}
-
-	@Override
-	public int updateDataToAmount(String ym) {
-
-		StringBuilder sb = new StringBuilder();
-
-		sb.append("UPDATE T_BILLING_DATA ");
-		sb.append("SET amount = ( ");
-		sb.append("SELECT SUM(amount) ");
-		sb.append("FROM T_CHARGE ");
-		sb.append("WHERE start_date <= LAST_DAY(PARSEDATETIME(CONCAT(? , '01'), 'yyyyMMdd')) ");
-		sb.append("AND (end_date IS NULL OR end_date >= PARSEDATETIME(CONCAT(? , '01'), 'yyyyMMdd')) ");
 		sb.append(") ");
-		sb.append("WHERE billing_ym = PARSEDATETIME(CONCAT(? , '01'), 'yyyyMMdd'); ");
-		String sql = sb.toString();
-		int result = jdbcTemplate.update(sql, ym, ym, ym) ;
-		
-		StringBuilder sb1 = new StringBuilder();
-		sb1.append("UPDATE T_BILLING_DATA ");
-		sb1.append("SET total = FLOOR(amount * (1 + tax_ratio)) ");
-		sb1.append("WHERE billing_ym = PARSEDATETIME(CONCAT(? , '01'), 'yyyyMMdd'); ");
+		sb.append("SELECT ");
+		sb.append(" PARSEDATETIME(CONCAT(? , '01'), 'yyyyMMdd'), ");
+		sb.append(" m.member_id, ");
+		sb.append(" m.mail, ");
+		sb.append(" m.name, ");
+		sb.append(" m.address, ");
+		sb.append(" m.start_date, ");
+		sb.append(" m.end_date, ");
+		sb.append(" m.payment_method, ");
+		sb.append(" (SELECT SUM(amount) FROM T_CHARGE ");
+		sb.append("   WHERE start_date <= LAST_DAY(PARSEDATETIME(CONCAT(? , '01'), 'yyyyMMdd')) ");
+		sb.append("     AND (end_date IS NULL OR end_date >= PARSEDATETIME(CONCAT(? , '01'), 'yyyyMMdd'))), ");
+		sb.append(" 0.1, ");
+		sb.append(" (SELECT SUM(amount) * (1 + 0.1) FROM T_CHARGE ");
+		sb.append("   WHERE start_date <= LAST_DAY(PARSEDATETIME(CONCAT(? , '01'), 'yyyyMMdd')) ");
+		sb.append("     AND (end_date IS NULL OR end_date >= PARSEDATETIME(CONCAT(? , '01'), 'yyyyMMdd'))), ");
+		sb.append(" CURRENT_TIMESTAMP ");
+		sb.append("FROM T_MEMBER m ");
+		sb.append("WHERE m.start_date <= LAST_DAY(PARSEDATETIME(CONCAT(? , '01'), 'yyyyMMdd')) ");
+		sb.append("AND (m.end_date IS NULL OR m.end_date >= PARSEDATETIME(CONCAT(? , '01'), 'yyyyMMdd'));");
 
-		String sql1 = sb1.toString();
-		jdbcTemplate.update(sql1, ym) ;
+		String sql = sb.toString();
+		int result = jdbcTemplate.update(sql, ym, ym, ym, ym, ym, ym, ym);
 		return result;
 	}
 
