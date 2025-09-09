@@ -1,4 +1,4 @@
-package com.s_giken.training.webapp.repository;
+package com.s_giken.training.webapp.repository.jdbc;
 
 import java.sql.Types;
 import java.util.List;
@@ -40,15 +40,6 @@ public class MemberRepositoryImpl implements MemberRepository {
 		int[] argTypes = { Types.BIGINT };
 		Member member = jdbcTemplate.queryForObject(sql, args, argTypes, rowMapper);
 		return Optional.ofNullable(member);
-	}
-
-	@Override
-	public List<Member> findByMailAndNameLike(String mail, String name) {
-		String sql = "SELECT * FROM T_MEMBER WHERE mail like ? AND name like ?";
-		Object[] args = { "%" + mail + "%", "%" + name + "%" };
-		int[] argTypes = { Types.VARCHAR, Types.VARCHAR };
-		List<Member> result = jdbcTemplate.query(sql, args, argTypes, rowMapper);
-		return result;
 	}
 
 	/**
@@ -129,4 +120,6 @@ public class MemberRepositoryImpl implements MemberRepository {
 
 		return processed_count;
 	}
+
+
 }

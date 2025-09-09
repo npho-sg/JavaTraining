@@ -3,12 +3,14 @@ package com.s_giken.training.webapp.service;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.s_giken.training.webapp.exception.AttributeErrorException;
 import com.s_giken.training.webapp.model.entity.Charge;
 import com.s_giken.training.webapp.model.entity.ChargeSearchForm;
-import com.s_giken.training.webapp.repository.ChargeRepository;
+import com.s_giken.training.webapp.repository.jdbc.ChargeRepository;
+import com.s_giken.training.webapp.repository.jpa.ChargeSortRepository;
 
 import lombok.RequiredArgsConstructor;
 
@@ -17,11 +19,26 @@ import lombok.RequiredArgsConstructor;
 public class ChargeServiceImpl implements ChargeService {
 
 	private final ChargeRepository chargeRepository;
+	private final ChargeSortRepository chargeSortRepository;
 	
-	@Override
-	public List<Charge> findByChargeName(ChargeSearchForm searchName) {
+	//Jpa利用
+	public List<Charge> findByNameSort(ChargeSearchForm form){
+		String chargeName = form.getChargeName();
+		String parm = form.getSortColumn();
+		String order = form.getSortOperation();
+		
 
-		return chargeRepository.findByChargeNameLike(searchName);
+		Sort sort = null;
+		if(order.equals("up")) {
+			sort = Sort.by(parm).ascending();
+		}else if(order.equals("down")){
+			sort = Sort.by(parm).descending();
+		}
+
+		List<Charge> sortedList
+			= chargeSortRepository.findByChargeNameContaining(chargeName, sort);
+		
+		return sortedList;
 	}
 	
 	@Override

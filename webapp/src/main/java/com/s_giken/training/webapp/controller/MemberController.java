@@ -73,11 +73,20 @@ public class MemberController {
 	 * @param model                Thymeleafに渡すデータ
 	 * @return 加入者検索結果画面のテンプレート名
 	 */
-	@PostMapping("/search")
+	/*@PostMapping("/search")
 	public String searchAndListing(
 			@ModelAttribute("memberSearchCondition") MemberSearchCondition memberSearchCodition,
 			Model model) {
 		var result = memberService.findByConditions(memberSearchCodition);
+		model.addAttribute("result", result);
+		return "member_search_result";
+	}*/
+	
+	@PostMapping("/search")
+	public String searchAndListing(
+			@ModelAttribute("memberSearchCondition") MemberSearchCondition memberSearchCodition,
+			Model model) {
+		var result = memberService.findToSort(memberSearchCodition);
 		model.addAttribute("result", result);
 		return "member_search_result";
 	}
@@ -126,11 +135,12 @@ public class MemberController {
 	 */
 	@PostMapping("/add")
 	@Transactional
-	public String addMember(
+	public String addMember(Model model,
 			@Validated Member member,
 			BindingResult bindingResult,
 			RedirectAttributes redirectAttributes) {
 		if (bindingResult.hasErrors()) {
+			model.addAttribute("isAddMode", true);
 			return "member_edit";
 		}
 		memberService.add(member);
