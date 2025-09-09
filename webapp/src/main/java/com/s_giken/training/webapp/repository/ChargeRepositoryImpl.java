@@ -1,6 +1,7 @@
-package com.s_giken.training.webapp.repository.jdbc;
+package com.s_giken.training.webapp.repository;
 
 import java.sql.Types;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -9,6 +10,7 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
 import com.s_giken.training.webapp.model.entity.Charge;
+import com.s_giken.training.webapp.model.entity.ChargeSearchForm;
 
 import lombok.RequiredArgsConstructor;
 
@@ -18,6 +20,18 @@ public class ChargeRepositoryImpl implements ChargeRepository {
 
 	private final JdbcTemplate jdbcTemplate;
 	private final RowMapper<Charge> rowMapper;
+
+	@Override
+	public List<Charge> findByChargeNameLike(ChargeSearchForm chargeName) {
+
+		String sql = "SELECT * FROM T_CHARGE WHERE name like ?";
+		Object[] args = { "%" + chargeName.getChargeName() + "%" };
+		int[] argTypes = { Types.VARCHAR };
+
+		List<Charge> result = jdbcTemplate.query(sql, args, argTypes, rowMapper);
+
+		return result;
+	}
 
 	@Override
 	public Optional<Charge> findByChargeId(Long chargeId) {

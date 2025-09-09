@@ -8,7 +8,7 @@ import com.s_giken.training.webapp.model.entity.ChargeSearchForm;
 
 public interface ChargeService {
 	
-	public List<Charge> findByNameSort(ChargeSearchForm form);
+	public List<Charge> findByChargeName(ChargeSearchForm form);
 	
 	public Optional<Charge> findByChargeId(Long chargeId);
 	

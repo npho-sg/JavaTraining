@@ -1,12 +1,11 @@
-package com.s_giken.training.webapp.repository.jdbc;
+package com.s_giken.training.webapp.repository;
 
 import java.util.List;
 import java.util.Optional;
 
 import com.s_giken.training.webapp.model.entity.Member;
 
-
-public interface MemberRepository{
+public interface MemberRepository {
 	/**
 	 * 加入者情報をすべて取得する。
 	 * 
@@ -20,6 +19,8 @@ public interface MemberRepository{
 	 * @return Optional型の Memberオブジェクト
 	 */
 	public Optional<Member> findById(Long id);
+
+	public List<Member> findByMailAndNameLike(String mail, String name);
 
 	/**
 	 * 加入者情報をデータベースへ登録する。
@@ -43,9 +44,5 @@ public interface MemberRepository{
 	 * @param id 加入者ID
 	 * @return 処理した件数
 	 */
-
-
 	public int deleteById(Long id);
-	
-	
 }

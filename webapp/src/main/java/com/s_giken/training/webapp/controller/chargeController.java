@@ -47,9 +47,9 @@ public class chargeController {
 	
 	@PostMapping("/search")
 	public String searchChargeResult(
-			@ModelAttribute("chargeSearchForm") ChargeSearchForm form,
+			@ModelAttribute("chargeSearchForm") ChargeSearchForm chargeSearchForm,
 			Model model) {
-		var result = chargeService.findByNameSort(form);
+		var result = chargeService.findByChargeName(chargeSearchForm);
 		model.addAttribute("result", result);
 		return "charge_search_result";
 	}
@@ -66,11 +66,10 @@ public class chargeController {
 	
 	@PostMapping("/add")
 	@Transactional
-	public String addChargeComfirm(Model model, @Validated Charge charge,
+	public String addChargeComfirm(@Validated Charge charge,
 			BindingResult bindingResult,
 			RedirectAttributes redirectAttributes) {
 		if (bindingResult.hasErrors()) {
-			model.addAttribute("isAddMode", true);
 			return "charge_edit";
 		}
 		chargeService.add(charge);

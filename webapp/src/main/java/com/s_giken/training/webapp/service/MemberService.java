@@ -19,8 +19,8 @@ public interface MemberService {
     public List<Member> findAll();
 
     public Optional<Member> findById(Long memberId);
-    
-    public List<Member> findToSort(MemberSearchCondition memberSearchCondition);
+
+    public List<Member> findByConditions(MemberSearchCondition memberSearchCondition);
 
     public void add(Member member);
 

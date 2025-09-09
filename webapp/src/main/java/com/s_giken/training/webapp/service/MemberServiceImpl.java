@@ -3,33 +3,27 @@ package com.s_giken.training.webapp.service;
 import java.util.List;
 import java.util.Optional;
 
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.s_giken.training.webapp.exception.AttributeErrorException;
 import com.s_giken.training.webapp.model.entity.Member;
 import com.s_giken.training.webapp.model.entity.MemberSearchCondition;
-import com.s_giken.training.webapp.repository.jdbc.MemberRepository;
-import com.s_giken.training.webapp.repository.jpa.MemberSortRepository;
+import com.s_giken.training.webapp.repository.MemberRepository;
 
 /**
  * 加入者管理機能のサービスクラス(実態クラス)
  */
 @Service
-@Transactional
 public class MemberServiceImpl implements MemberService {
 	private MemberRepository memberRepository;
-	private MemberSortRepository memberSortRepository;
 
 	/**
 	 * 加入者管理機能のサービスクラスのコンストラクタ
 	 * 
 	 * @param memberRepository 加入者管理機能のリポジトリクラス(SpringのDIコンテナから渡される)
 	 */
-	public MemberServiceImpl(MemberRepository memberRepository, MemberSortRepository memberSortRepository) {
+	public MemberServiceImpl(MemberRepository memberRepository) {
 		this.memberRepository = memberRepository;
-		this.memberSortRepository = memberSortRepository;
 	}
 
 	/**
@@ -59,27 +53,13 @@ public class MemberServiceImpl implements MemberService {
 	 * @param memberSearchCondition 加入者検索条件
 	 * @return 条件に一致した加入者情報
 	 */
-	
-	//Jpa利用
-	public List<Member> findToSort(MemberSearchCondition memberSearchCondition){
+	@Override
+	public List<Member> findByConditions(MemberSearchCondition memberSearchCondition) {
 		String mail = memberSearchCondition.getMail();
 		String name = memberSearchCondition.getName();
-		String parm = memberSearchCondition.getSortColumn();
-		String order = memberSearchCondition.getSortOperation();
-
-		Sort sort = null;
-		if(order.equals("up")) {
-			sort = Sort.by(parm).ascending();
-		}else if(order.equals("down")){
-			sort = Sort.by(parm).descending();
-		}
-
-		List<Member> sortedList
-			= memberSortRepository.findByMailContainingAndNameContaining(mail, name, sort);
 		
-		return sortedList;
+		return memberRepository.findByMailAndNameLike(mail, name);
 	}
-
 
 	/**
 	 * 加入者を登録する
