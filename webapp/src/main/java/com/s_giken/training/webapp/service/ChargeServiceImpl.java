@@ -1,6 +1,7 @@
 package com.s_giken.training.webapp.service;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.stereotype.Service;
@@ -17,19 +18,41 @@ import lombok.RequiredArgsConstructor;
 public class ChargeServiceImpl implements ChargeService {
 
 	private final ChargeRepository chargeRepository;
-	
-	@Override
-	public List<Charge> findByChargeName(ChargeSearchForm searchName) {
 
-		return chargeRepository.findByChargeNameLike(searchName);
-	}
-	
 	@Override
-	public Optional<Charge> findByChargeId(Long chargeId){
+	public List<Charge> findByChargeName(ChargeSearchForm form) {
 		
+		Map<String, String> columnMap = Map.of(
+				"1", "charge_id",
+				"2", "name",
+				"3", "start_date",
+				"4", "end_date");
+		
+		String column = columnMap.get(form.getSortColumn());
+		if(column == null) {
+			throw new IllegalArgumentException("並べ替え項目の値が不正です。");
+		}
+		form.setSortColumn(column);
+
+		Map<String, String> optionMap = Map.of(
+				"up", "ASC",
+				"down", "DESC");
+
+		String option = optionMap.get(form.getSortOperation());
+		if (option == null) {
+			throw new IllegalArgumentException("並べ替え項目の値が不正です。");
+		}
+		form.setSortOperation(option);
+
+		return chargeRepository.findByChargeNameLike(form);
+	}
+
+	@Override
+	public Optional<Charge> findByChargeId(Long chargeId) {
+
 		return chargeRepository.findByChargeId(chargeId);
 	}
-	
+
 	@Override
 	public void add(Charge charge) {
 		if (charge.getChargeId() != null) {
@@ -45,7 +68,6 @@ public class ChargeServiceImpl implements ChargeService {
 		}
 		chargeRepository.update(charge);
 	}
-
 
 	@Override
 	public void deleteById(Long chargeId) {

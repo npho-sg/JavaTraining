@@ -18,7 +18,7 @@ import com.s_giken.training.webapp.controller.editor.PaymentMethodEditorSupport;
 import com.s_giken.training.webapp.exception.NotFoundException;
 import com.s_giken.training.webapp.model.PaymentMethod;
 import com.s_giken.training.webapp.model.entity.Member;
-import com.s_giken.training.webapp.model.entity.MemberSearchCondition;
+import com.s_giken.training.webapp.model.entity.MemberSearchForm;
 import com.s_giken.training.webapp.service.MemberService;
 
 /**
@@ -61,9 +61,9 @@ public class MemberController {
 	 */
 	@GetMapping("/search")
 	public String showSearchCondition(Model model) {
-		var memberSearchCondition = new MemberSearchCondition();
-		model.addAttribute("memberSearchCondition", memberSearchCondition);
-		return "member_search_condition";
+		var memberSearchForm = new MemberSearchForm();
+		model.addAttribute("memberSearchForm", memberSearchForm);
+		return "member_search";
 	}
 
 	/**
@@ -75,9 +75,9 @@ public class MemberController {
 	 */
 	@PostMapping("/search")
 	public String searchAndListing(
-			@ModelAttribute("memberSearchCondition") MemberSearchCondition memberSearchCodition,
+			@ModelAttribute("memberSearchForm") MemberSearchForm memberSearchForm,
 			Model model) {
-		var result = memberService.findByConditions(memberSearchCodition);
+		var result = memberService.findByConditions(memberSearchForm);
 		model.addAttribute("result", result);
 		return "member_search_result";
 	}

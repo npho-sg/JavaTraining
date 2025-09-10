@@ -1,13 +1,14 @@
 package com.s_giken.training.webapp.service;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
 import com.s_giken.training.webapp.exception.AttributeErrorException;
 import com.s_giken.training.webapp.model.entity.Member;
-import com.s_giken.training.webapp.model.entity.MemberSearchCondition;
+import com.s_giken.training.webapp.model.entity.MemberSearchForm;
 import com.s_giken.training.webapp.repository.MemberRepository;
 
 /**
@@ -54,11 +55,33 @@ public class MemberServiceImpl implements MemberService {
 	 * @return 条件に一致した加入者情報
 	 */
 	@Override
-	public List<Member> findByConditions(MemberSearchCondition memberSearchCondition) {
-		String mail = memberSearchCondition.getMail();
-		String name = memberSearchCondition.getName();
-		
-		return memberRepository.findByMailAndNameLike(memberSearchCondition);
+	public List<Member> findByConditions(MemberSearchForm form) {
+
+		Map<String, String> columnMap = Map.of(
+				"1", "member_id",
+				"2", "mail",
+				"3", "name",
+				"4", "start_date",
+				"5", "end_date",
+				"6", "payment_method");
+
+		String column = columnMap.get(form.getSortColumn());
+		if (column == null) {
+			throw new IllegalArgumentException("並べ替え項目の値が不正です。");
+		}
+		form.setSortColumn(column);
+
+		Map<String, String> optionMap = Map.of(
+				"up", "ASC",
+				"down", "DESC");
+
+		String option = optionMap.get(form.getSortOperation());
+		if (option == null) {
+			throw new IllegalArgumentException("並べ替え項目の値が不正です。");
+		}
+		form.setSortOperation(option);
+
+		return memberRepository.findByMailAndNameLike(form);
 	}
 
 	/**

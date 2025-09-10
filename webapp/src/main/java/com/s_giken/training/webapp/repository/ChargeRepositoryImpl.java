@@ -24,15 +24,10 @@ public class ChargeRepositoryImpl implements ChargeRepository {
 	@Override
 	public List<Charge> findByChargeNameLike(ChargeSearchForm form) {
 		
-		String parm = form.getParm();
-		String option = form.getOption();
-		if(option.equals("up")) {
-			option = "ASC";
-		}else if(option.equals("down")) {
-			option = "DESC";
-		}
+		String column = form.getSortColumn();
+		String option = form.getSortOperation();
 		
-		String sql = "SELECT * FROM T_CHARGE WHERE name like ? ORDER BY " + parm + " " + option;
+		String sql = "SELECT * FROM T_CHARGE WHERE name like ? ORDER BY " + column + " " + option;
 		Object[] args = { "%" + form.getChargeName() + "%" };
 		int[] argTypes = { Types.VARCHAR };
 

@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import com.s_giken.training.webapp.model.entity.Member;
-import com.s_giken.training.webapp.model.entity.MemberSearchCondition;
+import com.s_giken.training.webapp.model.entity.MemberSearchForm;
 
 /*
  * 【ヒント】
@@ -20,7 +20,7 @@ public interface MemberService {
 
     public Optional<Member> findById(Long memberId);
 
-    public List<Member> findByConditions(MemberSearchCondition memberSearchCondition);
+    public List<Member> findByConditions(MemberSearchForm form);
 
     public void add(Member member);
 

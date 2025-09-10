@@ -9,7 +9,7 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
 import com.s_giken.training.webapp.model.entity.Member;
-import com.s_giken.training.webapp.model.entity.MemberSearchCondition;
+import com.s_giken.training.webapp.model.entity.MemberSearchForm;
 
 @Repository
 public class MemberRepositoryImpl implements MemberRepository {
@@ -44,19 +44,14 @@ public class MemberRepositoryImpl implements MemberRepository {
 	}
 
 	@Override
-	public List<Member> findByMailAndNameLike(MemberSearchCondition form) {
-		
+	public List<Member> findByMailAndNameLike(MemberSearchForm form) {
+
 		String mail = form.getMail();
 		String name = form.getName();
-		String parm = form.getParm();
-		String option = form.getOption();
-		if(option.equals("up")) {
-			option = "ASC";
-		}else if(option.equals("down")) {
-			option = "DESC";
-		}
-		
-		String sql = "SELECT * FROM T_MEMBER WHERE mail like ? AND name like ? ORDER BY " + parm + " " + option;
+		String column = form.getSortColumn();
+		String option = form.getSortOperation();
+
+		String sql = "SELECT * FROM T_MEMBER WHERE mail like ? AND name like ? ORDER BY " + column + " " + option;
 		Object[] args = { "%" + mail + "%", "%" + name + "%" };
 		int[] argTypes = { Types.VARCHAR, Types.VARCHAR };
 		List<Member> result = jdbcTemplate.query(sql, args, argTypes, rowMapper);
