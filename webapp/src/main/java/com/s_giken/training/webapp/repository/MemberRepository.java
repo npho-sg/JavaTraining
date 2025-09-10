@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import com.s_giken.training.webapp.model.entity.Member;
+import com.s_giken.training.webapp.model.entity.MemberSearchCondition;
 
 public interface MemberRepository {
 	/**
@@ -20,7 +21,7 @@ public interface MemberRepository {
 	 */
 	public Optional<Member> findById(Long id);
 
-	public List<Member> findByMailAndNameLike(String mail, String name);
+	public List<Member> findByMailAndNameLike(MemberSearchCondition form);
 
 	/**
 	 * 加入者情報をデータベースへ登録する。

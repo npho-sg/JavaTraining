@@ -22,10 +22,18 @@ public class ChargeRepositoryImpl implements ChargeRepository {
 	private final RowMapper<Charge> rowMapper;
 
 	@Override
-	public List<Charge> findByChargeNameLike(ChargeSearchForm chargeName) {
-
-		String sql = "SELECT * FROM T_CHARGE WHERE name like ?";
-		Object[] args = { "%" + chargeName.getChargeName() + "%" };
+	public List<Charge> findByChargeNameLike(ChargeSearchForm form) {
+		
+		String parm = form.getParm();
+		String option = form.getOption();
+		if(option.equals("up")) {
+			option = "ASC";
+		}else if(option.equals("down")) {
+			option = "DESC";
+		}
+		
+		String sql = "SELECT * FROM T_CHARGE WHERE name like ? ORDER BY " + parm + " " + option;
+		Object[] args = { "%" + form.getChargeName() + "%" };
 		int[] argTypes = { Types.VARCHAR };
 
 		List<Charge> result = jdbcTemplate.query(sql, args, argTypes, rowMapper);

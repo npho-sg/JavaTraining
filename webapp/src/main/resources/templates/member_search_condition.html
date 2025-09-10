@@ -18,6 +18,24 @@
         <input class="form-control" type="text" th:field="*{name}" />
       </div>
     </div>
+	
+	<div class="mb-3 row">
+	  <label class="col-sm-2 col-form-label" for="sortColumn">並び替え</label>
+	  <div class="col-sm-10 d-flex gap-3">
+	    <select class="form-control w-50" th:field="*{parm}">
+	      <option value="member_id">加入者ID</option>
+	      <option value="mail">メールアドレス</option>
+	      <option value="name">氏名</option>
+	      <option value="start_date">加入日</option>
+	      <option value="modified_at">更新日</option>
+	    </select>
+	    <select class="form-control w-50" th:field="*{option}">
+	      <option value="up">昇順</option>
+	      <option value="down">降順</option>
+	    </select>
+	  </div>
+	</div>
+	
     <div class="mb-3 row justify-content-between">
       <div class="col-auto">
         <button type="submit" class="btn btn-primary">検索</button>

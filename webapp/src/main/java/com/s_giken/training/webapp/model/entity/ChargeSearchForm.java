@@ -14,4 +14,6 @@ public class ChargeSearchForm {
 	@Max(value=127, message="最大が127文字です。")
 	private String chargeName;
 
+	private String parm;
+	private String option;
 }

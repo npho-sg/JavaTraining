@@ -10,6 +10,22 @@
         <input class="form-control" type="text" th:field="*{chargeName}" />
       </div>
     </div>
+	
+	<div class="mb-3 row">
+	  <label class="col-sm-2 col-form-label" for="sortColumn">並び替え</label>
+      <div class="col-sm-10 d-flex gap-3">
+        <select class="form-control w-50" th:field="*{parm}">
+          <option value="charge_id">料金ID</option>
+          <option value="name">料金名</option>
+          <option value="created_at">登録日</option>
+          <option value="modified_at">更新日</option>
+        </select>
+        <select class="form-control w-50" th:field="*{option}">
+    	      <option value="up">昇順</option>
+		  <option value="down">降順</option>
+	    </select>
+	  </div>
+	</div>
 
     <div class="mb-3 row justify-content-between">
       <div class="col-auto">
