@@ -13,23 +13,25 @@ import com.s_giken.training.webapp.repository.ChargeRepository;
 
 import lombok.RequiredArgsConstructor;
 
+//料金管理機能のサービスクラス（実態クラス）
 @Service
 @RequiredArgsConstructor
 public class ChargeServiceImpl implements ChargeService {
 
 	private final ChargeRepository chargeRepository;
-
+	
+	//料金名の部分一致による料金情報の検索
 	@Override
 	public List<Charge> findByChargeName(ChargeSearchForm form) {
-		
+
 		Map<String, String> columnMap = Map.of(
 				"1", "charge_id",
 				"2", "name",
 				"3", "start_date",
 				"4", "end_date");
-		
+
 		String column = columnMap.get(form.getSortColumn());
-		if(column == null) {
+		if (column == null) {
 			throw new IllegalArgumentException("並べ替え項目の値が不正です。");
 		}
 		form.setSortColumn(column);
@@ -46,13 +48,13 @@ public class ChargeServiceImpl implements ChargeService {
 
 		return chargeRepository.findByChargeNameLike(form);
 	}
-
+	//料金IDでの料金情報の検索
 	@Override
 	public Optional<Charge> findByChargeId(Long chargeId) {
 
 		return chargeRepository.findByChargeId(chargeId);
 	}
-
+	//料金情報の追加
 	@Override
 	public void add(Charge charge) {
 		if (charge.getChargeId() != null) {
@@ -60,7 +62,7 @@ public class ChargeServiceImpl implements ChargeService {
 		}
 		chargeRepository.add(charge);
 	}
-
+	//料金情報の編集
 	@Override
 	public void update(Charge charge) {
 		if (charge.getChargeId() == null) {
@@ -68,7 +70,7 @@ public class ChargeServiceImpl implements ChargeService {
 		}
 		chargeRepository.update(charge);
 	}
-
+	//料金IDでの料金情報の削除
 	@Override
 	public void deleteById(Long chargeId) {
 		chargeRepository.deleteByChargeId(chargeId);

@@ -20,7 +20,7 @@ public class ChargeRepositoryImpl implements ChargeRepository {
 
 	private final JdbcTemplate jdbcTemplate;
 	private final RowMapper<Charge> rowMapper;
-
+	//料金名の部分一致による料金情報検索
 	@Override
 	public List<Charge> findByChargeNameLike(ChargeSearchForm form) {
 		
@@ -35,7 +35,7 @@ public class ChargeRepositoryImpl implements ChargeRepository {
 
 		return result;
 	}
-
+	//料金IDによる料金情報検索
 	@Override
 	public Optional<Charge> findByChargeId(Long chargeId) {
 
@@ -51,7 +51,7 @@ public class ChargeRepositoryImpl implements ChargeRepository {
 		}
 
 	}
-
+	//料金情報の追加
 	@Override
 	public int add(Charge charge) {
 		Long chargeId = charge.getChargeId();
@@ -75,7 +75,7 @@ public class ChargeRepositoryImpl implements ChargeRepository {
 
 		return processed_count;
 	}
-
+	//料金情報の更新
 	@Override
 	public int update(Charge charge) {
 		String sql = """
@@ -98,7 +98,7 @@ public class ChargeRepositoryImpl implements ChargeRepository {
 
 		return processed_count;
 	}
-
+	//料金IDによる料金情報削除
 	@Override
 	public int deleteByChargeId(Long chargeId) {
 		String sql = "DELETE FROM T_CHARGE WHERE charge_id = ?";

@@ -33,7 +33,7 @@ public class MemberRepositoryImpl implements MemberRepository {
 		List<Member> result = jdbcTemplate.query(sql, rowMapper);
 		return result;
 	}
-
+	//加入者IDによる加入者情報の検索
 	@Override
 	public Optional<Member> findById(Long id) {
 		String sql = "SELECT * FROM T_MEMBER WHERE member_id =  ? ";
@@ -42,7 +42,9 @@ public class MemberRepositoryImpl implements MemberRepository {
 		Member member = jdbcTemplate.queryForObject(sql, args, argTypes, rowMapper);
 		return Optional.ofNullable(member);
 	}
-
+	/*加入者氏名の部分一致またはメールアドレスの部分一致による加入者情報の検索
+	 * 値を入力しなければ全件検索として動作する
+	 */
 	@Override
 	public List<Member> findByMailAndNameLike(MemberSearchForm form) {
 
