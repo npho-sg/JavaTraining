@@ -26,14 +26,25 @@ public class chargeController {
 	
 	private final ChargeService chargeService;
 	
-	//料金情報検索ページに遷移する
+	/**
+	 * 料金検索ページに遷移する
+	 * 
+	 * @param model Thymeleafにパラメータを渡す
+	 * @return 料金検索ページのテンプレート名
+	 */
 	@GetMapping("/search")
 	public String serchCharge(Model model) {
 		var chargeSearchForm = new ChargeSearchForm();
 		model.addAttribute("chargeSearchForm", chargeSearchForm);
 		return "charge_search";
 	}
-	//料金情報検索結果ページに遷移する
+	/**
+	 * 料金情報検索結果ページに遷移する
+	 * 
+	 * @param chargeSearchForm viewから検索条件のパラメーターを受け取る 
+	 * @param model Thymeleafにパラメータを渡す為
+	 * @return 料金一覧（検索結果）ページのテンプレート名
+	 */
 	@PostMapping("/search")
 	public String searchChargeResult(
 			@ModelAttribute("chargeSearchForm") ChargeSearchForm chargeSearchForm,
@@ -43,7 +54,11 @@ public class chargeController {
 		return "charge_search_result";
 	}
 	
-	//料金情報新規追加のページへ遷移する
+	/**料金情報新規追加のページへ遷移する
+	 * 
+	 * @param model Thymeleafにパラメータを渡す為
+	 * @return 料金新規追加ページのテンプレート名
+	 */
 	@GetMapping("/add")
 	public String addCharge(Model model) {
 		
@@ -52,8 +67,14 @@ public class chargeController {
 		model.addAttribute("charge", charge);
 		return "charge_edit";
 	}
-	/*料金情報新規追加時にデーターベースに保存せずに不正な値が出た場合は警告文を表示する
-	 * 成功時に料金情報編集のページに遷移する
+	/**
+	 * 料金情報新規追加時にデーターベースに保存せずに不正な値が出た場合は警告文を表示する
+	 * 
+	 * @param model Thymeleafにパラメータを渡す為
+	 * @param charge 料金クラスと紐づける
+	 * @param bindingResult 値が不正かどうかの確認
+	 * @param redirectAttributes リダイレクト先で値を保持する為のスコープ
+	 * @return エラー発生時：料金新規追加ページのテンプレート名、成功時：料金編集ページのテンプレート名へのリダイレクト
 	 */
 	@PostMapping("/add")
 	@Transactional
@@ -71,7 +92,12 @@ public class chargeController {
 		return "redirect:/charge/edit/" + charge.getChargeId();
 	}
 	
-	//料金情報編集のページに遷移する
+	/**料金情報編集のページに遷移する
+	 * 
+	 * @param chargeId 料金ID
+	 * @param model Thymeleafにパラメータを渡す為
+	 * @return 料金編集ページのテンプレート名
+	 */
 	@GetMapping("/edit/{id}")
 	public String editCharge(
 			@PathVariable("id") Long chargeId,
@@ -85,7 +111,13 @@ public class chargeController {
 		return "charge_edit";
 	
 	}
-	//データーベースに編集した料金情報を登録する
+	/** データーベースに編集した料金情報を登録する
+	 * 
+	 * @param charge 料金クラスと紐づける為
+	 * @param bindingResult 値が不正かどうかの確認
+	 * @param redirectAttributes リダイレクト先で値を保持する為のスコープ
+	 * @return エラー発生時：料金編集ページのテンプレート名、成功時：料金編集ページのテンプレート名へのリダイレクト
+	 */
 	@PostMapping("/update")
 	@Transactional
 	public String saveCharge(
@@ -99,7 +131,12 @@ public class chargeController {
 		redirectAttributes.addFlashAttribute("message", "保存しました。");
 		return "redirect:/charge/edit/" + charge.getChargeId();
 	}
-	//料金除法を削除する
+	/**料金除法を削除する
+	 * 
+	 * @param chargeId 料金ID
+	 * @param redirectAttributes ダイレクト先で値を保持する為のスコープ
+	 * @return 料金検索ページのテンプレート名へリダイレクト
+	 */
 	@GetMapping("/delete/{id}")
 	@Transactional
 	public String deleteCharge(

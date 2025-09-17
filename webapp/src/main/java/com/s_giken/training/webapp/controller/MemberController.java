@@ -127,10 +127,12 @@ public class MemberController {
 	@PostMapping("/add")
 	@Transactional
 	public String addMember(
+			Model model,
 			@Validated Member member,
 			BindingResult bindingResult,
 			RedirectAttributes redirectAttributes) {
 		if (bindingResult.hasErrors()) {
+			model.addAttribute("isAddMode", true);
 			return "member_edit";
 		}
 		memberService.add(member);

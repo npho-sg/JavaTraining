@@ -19,8 +19,12 @@ import lombok.RequiredArgsConstructor;
 public class ChargeServiceImpl implements ChargeService {
 
 	private final ChargeRepository chargeRepository;
-	
-	//料金名の部分一致による料金情報の検索
+
+	/**料金名の部分一致による料金情報の検索
+	 * 
+	 * @param form 検索条件
+	 * @param return 料金リスト
+	 */
 	@Override
 	public List<Charge> findByChargeName(ChargeSearchForm form) {
 
@@ -48,13 +52,22 @@ public class ChargeServiceImpl implements ChargeService {
 
 		return chargeRepository.findByChargeNameLike(form);
 	}
-	//料金IDでの料金情報の検索
+
+	/**料金IDでの料金情報の検索
+	 * 
+	 * @param chargeId 料金ID
+	 * @return 料金情報一件
+	 */
 	@Override
 	public Optional<Charge> findByChargeId(Long chargeId) {
 
 		return chargeRepository.findByChargeId(chargeId);
 	}
-	//料金情報の追加
+
+	/**料金情報の追加
+	 * 
+	 * @param charge 料金クラス
+	 */
 	@Override
 	public void add(Charge charge) {
 		if (charge.getChargeId() != null) {
@@ -62,7 +75,11 @@ public class ChargeServiceImpl implements ChargeService {
 		}
 		chargeRepository.add(charge);
 	}
-	//料金情報の編集
+
+	/**料金情報の編集
+	 * 
+	 * @param charge 料金クラス
+	 */
 	@Override
 	public void update(Charge charge) {
 		if (charge.getChargeId() == null) {
@@ -70,7 +87,11 @@ public class ChargeServiceImpl implements ChargeService {
 		}
 		chargeRepository.update(charge);
 	}
-	//料金IDでの料金情報の削除
+
+	/**料金IDでの料金情報の削除
+	 * 
+	 * @param chargeId 料金ID
+	 */
 	@Override
 	public void deleteById(Long chargeId) {
 		chargeRepository.deleteByChargeId(chargeId);

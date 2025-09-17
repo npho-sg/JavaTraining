@@ -19,7 +19,7 @@ public class ChargeRowMapper implements RowMapper<Charge> {
 	 * @param rs     データベースからのレコードセット
 	 * @param rowNum 処理行数
 	 * 
-	 * @return Memberオブジェクト
+	 * @return Chargeオブジェクト
 	 */
 
 	@Override

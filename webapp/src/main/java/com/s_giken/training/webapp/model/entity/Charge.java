@@ -20,29 +20,29 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Charge {
-	
+	//料金ID
 	@Nullable
 	private Long chargeId;
-	
+	//料金名
 	@NotBlank
 	private String chargeName;
-	
+	//金額
 	@NotNull
 	@DecimalMin(value = "0")
 	@DecimalMax(value = "999999999")
 	private BigDecimal amount;
-	
+	//適用開始日
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
     @NotNull
 	private LocalDate startDate;
-	
+	//適用終了日
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
     @Nullable
 	private LocalDate endDate;
-	
+	//レコード作成日
 	@Nullable
 	private Timestamp createdAt;
-	
+	//レコード更新日
 	@Nullable
 	private Timestamp modifiedAt;
 
