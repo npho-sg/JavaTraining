@@ -17,14 +17,13 @@ import lombok.RequiredArgsConstructor;
 @Repository
 @RequiredArgsConstructor
 public class ChargeRepositoryImpl implements ChargeRepository {
-	//jdbcを利用する為
+
 	private final JdbcTemplate jdbcTemplate;
-	//マッパーを利用するため
 	private final RowMapper<Charge> rowMapper;
 
 	/**料金名の部分一致検索
 	 * 
-	 * @param 検索条件
+	 * @param form 検索条件
 	 * @return 料金リスト
 	 */
 	@Override
@@ -44,7 +43,7 @@ public class ChargeRepositoryImpl implements ChargeRepository {
 
 	/**料金IDによる検索
 	 * 
-	 * @param 料金ID
+	 * @param chargeId 料金ID
 	 * @return 料金情報一件
 	 */
 	@Override
@@ -65,7 +64,7 @@ public class ChargeRepositoryImpl implements ChargeRepository {
 
 	/**料金情報の追加
 	 * 
-	 * @param 料金クラス
+	 * @param charge 料金クラス
 	 * @return 実行した件数
 	 */
 	@Override
@@ -94,7 +93,7 @@ public class ChargeRepositoryImpl implements ChargeRepository {
 
 	/**料金情報の更新
 	 * 
-	 * @param 料金クラス
+	 * @param charge 料金クラス
 	 * @return 実行した件数
 	 */
 	@Override
@@ -122,7 +121,7 @@ public class ChargeRepositoryImpl implements ChargeRepository {
 
 	/**料金IDによる料金情報削除
 	 * 
-	 * @param 料金ID
+	 * @param chargeId 料金ID
 	 * @return 実行した件数
 	 */
 	@Override
