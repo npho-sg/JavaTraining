@@ -18,8 +18,9 @@ public class AccountRepositoryImpl implements AccountRepository {
 	//マッパーを利用するため
 	private final RowMapper<Account> rowMapper;
 	
-    /**
-    * 
+    /**ログイン時のアカウント名によるユーザー検索
+    * @param name ユーザー名
+    * @return アカウントクラス
     */
 	@Override
 	public Account findByUserName(String name) {
